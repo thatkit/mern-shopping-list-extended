@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-// Item Model
+// User Model
 const User = require('../../models/User');
 
 // @route           POST api/users
@@ -61,7 +61,7 @@ router.post('/', (req, res) => {
 
 // @route           GET api/users
 // @description     GET All Users
-// @access          Private
+// @access          Admin
 router.get('/', (req, res) => {
     User
         .find()
