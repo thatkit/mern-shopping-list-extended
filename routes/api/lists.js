@@ -6,34 +6,70 @@ const router = express.Router();
 // List Model
 const List = require('../../models/List');
 
+// .catch() callback
+const catchCallback = e => res.status(404).json({success: false});
+
 // @route           GET api/lists
-// @description     GET all lists
+// @description     GET a list
 // @access          Private
-router.get('/', auth, (req, res) => {
+router.get('/', (req, res) => {
     List
-        .find()
-        .sort({ date: 1 })
-        .then(lists => res.json(lists))
+        .findById(req.body.listId)
+        .populate('items')
+        .then(list => res.json(list))
+        .catch(catchCallback);
 });
 
 // @route           POST api/lists
 // @description     Create a list
 // @access          Private
-router.post('/', auth, (req, res) => {
-    const newItem = new Item({
-        name: req.body.name
+router.post('/', (req, res) => {
+    const newList = new List({
+        name: req.body.name,
+        totalBudget: req.body.totalBudget,
     });
-    newItem.save().then(item => res.json(item));
+    newList
+        .save()
+        .then(list => res.json(list))
+        .catch(catchCallback);
+});
+
+// @route           PUT api/lists
+// @description     Add a new item to the list
+// @access          Private
+router.put('/', (req, res) => {
+    List
+        .findOneAndUpdate(
+            { listId: req.body.listId },
+            { $push: { items: req.body.itemId } }
+        )
+        .then(list => res.json(list))
+        .catch(catchCallback);
+});
+
+// @route           PUT api/lists/:itemId
+// @description     Remove an item from the list
+// @access          Private
+router.put('/:itemId', (req, res) => {
+    List
+        .findOneAndUpdate(
+            { listId: req.body.listId },
+            { $pull: { items: req.params.itemId } }
+        )
+        .then(list => res.json(list))
+        .catch(catchCallback);
 });
 
 // @route           DELETE api/lists/:id
 // @description     Delete a list
 // @access          Private
-router.delete('/:id', auth, (req, res) => {
-    Item
-        .findById(req.params.id)
-        .then(item => item.remove().then(() => res.json({ id: req.params.id })))
-        .catch(e => res.status(404).json({success: false}));
+router.delete('/:listId', (req, res) => {
+    List
+        .findById(req.params.listId)
+        .then(list => list
+            .remove()
+            .then(() => res.json({ id: req.params.listId })))
+        .catch(catchCallback);
 });
 
 module.exports = router;

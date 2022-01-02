@@ -9,18 +9,21 @@ const ListSchema = new Schema({
         unique: true
     },
     // user_id, // wtf
-    // items, // wtf
-    total_budget: {
+    items: [{
+        type: Schema.Types.ObjectId,
+        ref: 'item'
+    }],
+    totalBudget: {
         type: Number,
         required: true
     },
-    total_costs: {
+    totalCosts: {
         type: Number,
         default: 0
     },
     remainder: {
         type: Number,
-        default: this.total_budget - this.total_costs
+        default: 0
     }
 });
 
