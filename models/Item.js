@@ -7,10 +7,6 @@ const ItemSchema = new Schema({
         type: String,
         required: true
     },
-    // list: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'list'
-    // },
     desc: {
         type: String
     },
