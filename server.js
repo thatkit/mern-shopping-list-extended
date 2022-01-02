@@ -14,6 +14,7 @@ mongoose
     .catch(e => console.log(e));
 
 // Use Routes
+app.use('/api/lists', require('./routes/api/lists'));
 app.use('/api/items', require('./routes/api/items'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
