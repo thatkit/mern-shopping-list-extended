@@ -10,11 +10,10 @@ const List = require('../../models/List');
 // @description     GET all lists
 // @access          Private
 router.get('/', auth, (req, res) => {
-    res.send('success');
-    // Item
-    //     .find()
-    //     .sort({ date: 1 })
-    //     .then(items => res.json(items))
+    List
+        .find()
+        .sort({ date: 1 })
+        .then(lists => res.json(lists))
 });
 
 // @route           POST api/lists
